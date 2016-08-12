@@ -12,6 +12,7 @@ boolean float_equals(float f1, float f2)
 
 void main()
 {
+	if(!have_skill($skill[Flavour of Magic]) || !be_good($skill[Flavour of Magic]))
 		return;
 	
 	setvar("flavour.perfectonly", false);
