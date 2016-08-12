@@ -12,6 +12,8 @@ boolean float_equals(float f1, float f2)
 
 void main()
 {
+		return;
+	
 	setvar("flavour.perfectonly", false);
 	
 	float [element] double_damage;
