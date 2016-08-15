@@ -10,7 +10,7 @@ boolean float_equals(float f1, float f2)
 	return abs(f1 - f2) < EPSILON;
 }
 
-void main()
+void flavour_auto_tune()
 {
 	setvar("flavour.perfectonly", false);
 	setvar("flavour.disabled", false);
@@ -145,4 +145,9 @@ void main()
 				break;
 		}
 	}
+}
+
+void main()
+{
+	flavour_auto_tune();
 }
