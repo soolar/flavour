@@ -91,8 +91,23 @@ void main()
 	
 	if(to_boolean(vars["flavour.perfectonly"]) && !perfect[flavour])
 		flavour = $element[none];
-	else if(loc == $location[The Ancient Hobo Burial Ground]) // Everything here is immune to elemental dmg
-		flavour = $element[none];
+	
+	item offhand = equipped_item($slot[off-hand]);
+	
+	switch(loc)
+	{
+		case $location[The Ancient Hobo Burial Ground]: // Everything here is immune to elemental dmg
+			flavour = $element[none];
+			break;
+		case $location[The Ice Hotel]:
+			if(get_property("walfordBucketItem") == "rain" && offhand == $item[Walford's bucket])
+				flavour = $element[hot]; // Doing 100 hot damage in a fight will fill the bucket faster
+			// Lack of break is intentional
+		case $location[VYKEA]:
+			if(get_property("walfordBucketItem") == "ice" && offhand == $item[Walford's bucket])
+				flavour = $element[cold]; // It will do 1 damage unless you change their element somehow, but doing 10 cold damage speeds filling the bucket
+			break;
+	}
 	
 	element current_flavour = $element[none];
 	if(have_effect($effect[Spirit of Bacon Grease]) > 0)
