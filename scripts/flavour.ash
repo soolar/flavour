@@ -12,10 +12,12 @@ boolean float_equals(float f1, float f2)
 
 void main()
 {
+	setvar("flavour.perfectonly", false);
+	setvar("flavour.disabled", false);
+	if(to_boolean(vars["flavour.disabled"]))
+		return;
 	if(!have_skill($skill[Flavour of Magic]) || !be_good($skill[Flavour of Magic]))
 		return;
-	
-	setvar("flavour.perfectonly", false);
 	
 	float [element] double_damage;
 	boolean [element] perfect;
@@ -79,9 +81,7 @@ void main()
 	}
 	
 	if(to_boolean(vars["flavour.perfectonly"]) && !perfect[flavour])
-	{
 		flavour = $element[none];
-	}
 	
 	element current_flavour = $element[none];
 	if(have_effect($effect[Spirit of Bacon Grease]) > 0)
