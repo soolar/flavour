@@ -91,6 +91,8 @@ void main()
 	
 	if(to_boolean(vars["flavour.perfectonly"]) && !perfect[flavour])
 		flavour = $element[none];
+	else if(loc == $location[The Ancient Hobo Burial Ground]) // Everything here is immune to elemental dmg
+		flavour = $element[none];
 	
 	element current_flavour = $element[none];
 	if(have_effect($effect[Spirit of Bacon Grease]) > 0)
