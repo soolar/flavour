@@ -14,9 +14,14 @@ void main()
 {
 	setvar("flavour.perfectonly", false);
 	setvar("flavour.disabled", false);
+	
+	location loc = my_location();
+	
 	if(to_boolean(vars["flavour.disabled"]))
 		return;
 	if(!have_skill($skill[Flavour of Magic]) || !be_good($skill[Flavour of Magic]))
+		return;
+	if(loc == $location[Hobopolis Town Square]) // Don't interfere with Scarehobos
 		return;
 	
 	float [element] double_damage;
@@ -62,7 +67,7 @@ void main()
 		}
 	}
 	
-	foreach mon,chance in appearance_rates(my_location(), true)
+	foreach mon,chance in appearance_rates(loc, true)
 		handle_monster(mon, chance);
 	
 	element flavour = $element[none];
