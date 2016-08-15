@@ -70,6 +70,10 @@ void main()
 	foreach mon,chance in appearance_rates(loc, true)
 		handle_monster(mon, chance);
 	
+	// Effectively never tune to cold in OCRS because of cold monsters
+	if(my_path() == "One Crazy Random Summer")
+		one_damage[$element[cold]] += 1;
+	
 	element flavour = $element[none];
 	float best_score = -1;
 	float best_spell_damage = -99999;
