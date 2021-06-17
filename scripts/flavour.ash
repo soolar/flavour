@@ -17,7 +17,7 @@ void flavour_auto_tune()
 	
 	location loc = my_location();
 	
-	if(to_boolean(vars["flavour.disabled"]))
+	if(to_boolean(getvar("flavour.disabled")))
 		return;
 	if(!have_skill($skill[Flavour of Magic]) || !be_good($skill[Flavour of Magic]))
 		return;
@@ -89,7 +89,7 @@ void flavour_auto_tune()
 		}
 	}
 	
-	if(to_boolean(vars["flavour.perfectonly"]) && !perfect[flavour])
+	if(to_boolean(getvar("flavour.perfectonly")) && !perfect[flavour])
 		flavour = $element[none];
 	
 	item offhand = equipped_item($slot[off-hand]);
