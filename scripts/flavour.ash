@@ -14,27 +14,27 @@ void flavour_auto_tune()
 {
 	setvar("flavour.perfectonly", false);
 	setvar("flavour.disabled", false);
-	
+
 	location loc = my_location();
-	
+
 	if(to_boolean(getvar("flavour.disabled")))
 		return;
 	if(!have_skill($skill[Flavour of Magic]) || !be_good($skill[Flavour of Magic]))
 		return;
 	if(loc == $location[Hobopolis Town Square]) // Don't interfere with Scarehobos
 		return;
-	
+
 	float [element] double_damage;
 	boolean [element] perfect;
 	float [element] one_damage;
-	
+
 	foreach ele in $elements[cold, hot, sleaze, spooky, stench, none]
 	{
 		double_damage[ele] = 0;
 		one_damage[ele] = 0;
 		perfect[ele] = true;
 	}
-	
+
 	boolean [element] weak_elements(element ele)
 	{
 		switch(ele)
@@ -47,37 +47,37 @@ void flavour_auto_tune()
 			default: return $elements[none];
 		}
 	}
-	
+
 	void handle_monster(monster mon, float chance)
 	{
 		if(chance == 0 || mon == $monster[none])
 			return;
-		
+
 		boolean [element] weaknesses = weak_elements(mon.defense_element);
-		
+
 		foreach ele in $elements[cold, hot, sleaze, spooky, stench]
 		{
 			if(ele == mon.defense_element)
 				one_damage[ele] += chance;
-			
+
 			if(weaknesses contains ele)
 				double_damage[ele] += chance;
 			else
 				perfect[ele] = false;
 		}
 	}
-	
+
 	foreach mon,chance in appearance_rates(loc, true)
 		handle_monster(mon, chance);
-	
+
 	// Effectively never tune to cold in OCRS because of cold monsters
 	if(my_path() == "One Crazy Random Summer")
 		one_damage[$element[cold]] += 1;
-	
+
 	element flavour = $element[none];
 	float best_score = -1;
 	float best_spell_damage = -99999;
-	
+
 	foreach ele in $elements[cold, hot, sleaze, spooky, stench]
 	{
 		float spell_damage = numeric_modifier(ele.to_string() + " Spell Damage");
@@ -88,12 +88,12 @@ void flavour_auto_tune()
 			best_spell_damage = spell_damage;
 		}
 	}
-	
+
 	if(to_boolean(getvar("flavour.perfectonly")) && !perfect[flavour])
 		flavour = $element[none];
-	
+
 	item offhand = equipped_item($slot[off-hand]);
-	
+
 	switch(loc)
 	{
 		case $location[The Ancient Hobo Burial Ground]: // Everything here is immune to elemental dmg
@@ -107,8 +107,12 @@ void flavour_auto_tune()
 			if(get_property("walfordBucketItem") == "ice" && offhand == $item[Walford's bucket])
 				flavour = $element[cold]; // It will do 1 damage unless you change their element somehow, but doing 10 cold damage speeds filling the bucket
 			break;
+		case $location[The Smut Orc Logging Camp]:
+			if(get_property("chasmBridgeProgress").to_int() < 30)
+				flavour = $element[cold]; // Blech house speedup
+			break;
 	}
-	
+
 	element current_flavour = $element[none];
 	if(have_effect($effect[Spirit of Bacon Grease]) > 0)
 		current_flavour = $element[sleaze];
@@ -120,7 +124,7 @@ void flavour_auto_tune()
 		current_flavour = $element[spooky];
 	else if(have_effect($effect[Spirit of Peppermint]) > 0)
 		current_flavour = $element[cold];
-	
+
 	if(flavour != current_flavour)
 	{
 		switch(flavour)
